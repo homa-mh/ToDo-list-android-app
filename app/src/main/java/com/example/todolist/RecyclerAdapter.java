@@ -1,5 +1,6 @@
 package com.example.todolist;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
@@ -25,8 +27,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
+        MyViewHolder MyViewHolder = (MyViewHolder) holder;
+        TaskModel task = this.taskModel.get(position);
+        MyViewHolder.txtTaskName.setText(task.getTaskName());
+        MyViewHolder.txtTaskDate.setText(task.getDate());
+
+//        DBHandler dbHandler = new DBHandler(RecyclerAdapter , "todoListDB", null, 1);
+        MyViewHolder.btnDeleteTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                dbHandler.deleteTask(position);
+            }
+        });
+        MyViewHolder.btnCompleteTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                dbHandler.completeTask(position);
+            }
+        });
+        MyViewHolder.btnEditTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
