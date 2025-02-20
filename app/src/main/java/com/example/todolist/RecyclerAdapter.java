@@ -2,6 +2,7 @@ package com.example.todolist;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -15,15 +16,17 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
-    ArrayList<TaskModel> taskModel;
-    public RecyclerAdapter(Context context, ArrayList<TaskModel> taskModel){
+    List<TaskModel> taskModel;
+    public RecyclerAdapter(Context context, List<TaskModel> taskModel){
         this.taskModel = taskModel;
         this.context = context;
     }
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.recycler_items, parent, false);
+        return new RecyclerAdapter.MyViewHolder(view);
     }
 
     @Override
@@ -34,17 +37,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         MyViewHolder.txtTaskName.setText(task.getTaskName());
         MyViewHolder.txtTaskDate.setText(task.getDate());
 
-//        DBHandler dbHandler = new DBHandler(RecyclerAdapter , "todoListDB", null, 1);
+        DBHandler dbHandler = new DBHandler(context , "todoListDB", null, 1);
         MyViewHolder.btnDeleteTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                dbHandler.deleteTask(position);
+                dbHandler.deleteTask(position);
             }
         });
         MyViewHolder.btnCompleteTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                dbHandler.completeTask(position);
+                dbHandler.completeTask(position);
+
             }
         });
         MyViewHolder.btnEditTask.setOnClickListener(new View.OnClickListener() {
