@@ -2,6 +2,8 @@ package com.example.todolist;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,19 +38,47 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TaskModel task = this.taskModel.get(position);
         MyViewHolder.txtTaskName.setText(task.getTaskName());
         MyViewHolder.txtTaskDate.setText(task.getDate());
+        if(task.isCompleted() == 1){
+            MyViewHolder.btnCompleteTask.setImageResource(R.drawable.completed_task);
+
+                    MyViewHolder.txtTaskName.setPaintFlags(MyViewHolder.txtTaskName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    MyViewHolder.txtTaskName.setTextColor(Color.GRAY);
+;
+
+        }else {
+            MyViewHolder.btnCompleteTask.setImageResource(R.drawable.not_completed);
+
+                    MyViewHolder.txtTaskName.setPaintFlags(MyViewHolder.txtTaskName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    MyViewHolder.txtTaskName.setTextColor(Color.BLACK);
+
+
+
+        }
 
         DBHandler dbHandler = new DBHandler(context , "todoListDB", null, 1);
         MyViewHolder.btnDeleteTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dbHandler.deleteTask(position);
+                int id = task.getId();
+                dbHandler.deleteTask(id);
+
+                taskModel.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, taskModel.size());
             }
         });
         MyViewHolder.btnCompleteTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dbHandler.completeTask(position);
-
+                int id = task.getId();
+                if(task.isCompleted() == 0){
+                    dbHandler.completeTask(id);
+                    task.setCompleted(1);
+                }else{
+                    task.setCompleted(0);
+                    dbHandler.unCompleteTask(id);
+                }
+                notifyDataSetChanged();
             }
         });
         MyViewHolder.btnEditTask.setOnClickListener(new View.OnClickListener() {
@@ -80,5 +110,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             btnCompleteTask = itemView.findViewById(R.id.btnCompleteTask);
 
         }
+    }
+
+    public void refresh (List<TaskModel> newTasks){
+        this.taskModel = newTasks;
+        notifyDataSetChanged();
     }
 }

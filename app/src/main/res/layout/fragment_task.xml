@@ -14,14 +14,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/txtInputTask"
-                android:layout_width="340dp"
+                android:layout_width="250dp"
                 android:layout_height="70dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="20dp"
+                android:layout_weight="5"
                 android:ems="10"
                 android:hint="Enter your new task here."
                 android:inputType="text"
@@ -30,9 +33,10 @@
 
             <ImageButton
                 android:id="@+id/btnCalendar"
-                android:layout_width="10dp"
-                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:backgroundTint="#00FFFFFF"
                 android:scaleType="fitCenter"

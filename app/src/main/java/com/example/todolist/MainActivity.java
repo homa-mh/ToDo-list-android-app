@@ -44,4 +44,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void onTasksUpdated() {
+        DBHandler dbHandler = new DBHandler(this, "todoListDB", null, 1);
+        List<TaskModel> updatedTasks = dbHandler.showAllTAsks();
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(this, updatedTasks);
+        recyclerView.setAdapter(recyclerAdapter);
+        recyclerAdapter.notifyDataSetChanged();
+    }
 }

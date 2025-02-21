@@ -42,7 +42,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public List<TaskModel> showAllTAsks(){
         List<TaskModel> tasks = new ArrayList<>();
         SQLiteDatabase SQLiteDatabase = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COMPLETED_COL + " DESC, " +
+        String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COMPLETED_COL + " ASC, " +
                 DATE_COL + " ASC";
         Cursor cursor = SQLiteDatabase.rawQuery(query, null);
         if (cursor == null) {
@@ -52,12 +52,16 @@ public class DBHandler extends SQLiteOpenHelper {
             do {
                 int taskIndex = cursor.getColumnIndex(TASK_COL);
                 int dateIndex = cursor.getColumnIndex(DATE_COL);
+                int idIndex = cursor.getColumnIndex(ID_COL);
+                int isCompletedIndex = cursor.getColumnIndex(COMPLETED_COL);
                 if (taskIndex == -1 || dateIndex == -1) {
                     continue;
                 }
                 String taskName = cursor.getString(taskIndex);
                 String date = cursor.getString(dateIndex);
-                tasks.add(new TaskModel(taskName, date));
+                int id = cursor.getInt(idIndex);
+                int isCompleted = cursor.getInt(isCompletedIndex);
+                tasks.add(new TaskModel(id,taskName, date, isCompleted));
             }
             while (cursor.moveToNext());
         }
@@ -95,6 +99,13 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COMPLETED_COL, 1);
+        db.update(TABLE_NAME,values, "ID =? ", new String[]{String.valueOf(id)});
+        db.close();
+    }
+    public void unCompleteTask(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COMPLETED_COL, 0);
         db.update(TABLE_NAME,values, "ID =? ", new String[]{String.valueOf(id)});
         db.close();
     }

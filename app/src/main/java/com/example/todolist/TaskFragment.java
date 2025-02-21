@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,6 +98,7 @@ public class TaskFragment extends DialogFragment {
 
 
         DBHandler dbHandler = new DBHandler(requireContext(), "todoListDB", null, 1);
+
         btnSaveTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,6 +106,7 @@ public class TaskFragment extends DialogFragment {
                 TaskModel taskModel = new TaskModel(task,date);
                 if ( !task.isEmpty() ){
                     dbHandler.addNewTask(taskModel.getTaskName(), taskModel.getDate());
+                    ((MainActivity) getActivity()).onTasksUpdated();
 
                 }
                 dismiss();
