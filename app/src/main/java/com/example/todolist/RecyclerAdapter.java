@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -19,9 +21,11 @@ import java.util.List;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
     List<TaskModel> taskModel;
-    public RecyclerAdapter(Context context, List<TaskModel> taskModel){
+    FragmentManager fragmentManager;
+    public RecyclerAdapter(Context context, List<TaskModel> taskModel, FragmentManager fragmentManager){
         this.taskModel = taskModel;
         this.context = context;
+        this.fragmentManager = fragmentManager;
     }
     @NonNull
     @Override
@@ -84,7 +88,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         MyViewHolder.btnEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Bundle bundle = new Bundle();
+                bundle.putInt("id",task.getId());
+                bundle.putString("task", task.getTaskName());
+                TaskFragment taskFragment = new TaskFragment();
+                taskFragment.setArguments(bundle);
+                taskFragment.show(fragmentManager,"TaskFragment");
             }
         });
     }

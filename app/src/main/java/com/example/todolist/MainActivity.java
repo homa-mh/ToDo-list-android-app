@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         tasks = dbHandler.showAllTAsks();
         if (tasks == null) tasks = new ArrayList<>();
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(this, tasks);
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(this, tasks, getSupportFragmentManager());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(recyclerAdapter);
 
@@ -39,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
             TaskFragment taskFragment = new TaskFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("id",-1);
+            bundle.putString("task", null);
+            taskFragment.setArguments(bundle);
             taskFragment.show(getSupportFragmentManager(),"TaskFragment");
 
             }
@@ -47,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public void onTasksUpdated() {
         DBHandler dbHandler = new DBHandler(this, "todoListDB", null, 1);
         List<TaskModel> updatedTasks = dbHandler.showAllTAsks();
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(this, updatedTasks);
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(this, updatedTasks, getSupportFragmentManager());
         recyclerView.setAdapter(recyclerAdapter);
         recyclerAdapter.notifyDataSetChanged();
     }
